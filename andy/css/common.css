@@ -1,0 +1,2 @@
+*{box-sizing:border-box}.wrapper{position:fixed;width:100%;height:100%;top:0;left:0;margin-left:0;margin-top:0}.wrapper .word{position:absolute;width:auto;height:auto;top:50%;left:50%;transform:translate(-50%, -50%);font-size:5.625vw;line-height:5.625vw;font-weight:normal;font-family:Arial,"Microsoft JhengHei";color:#000;text-align:center;z-index:1}.wrapper img{opacity:0;position:absolute;height:100%;left:0;top:0}.wrapper img.on{opacity:1}
+/*# sourceMappingURL=common.css.map */
