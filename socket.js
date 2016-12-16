@@ -23,10 +23,10 @@ io.on('connection', function(socket){
 		io.emit('imgGo', { for: 'everyone' });
 	});
 	
-	// socket.on('disconnect', function(){
-	//     console.log('user:'+socket.id+' disconnected');
+	socket.on('disconnect', function(){
+	    console.log('user:'+socket.id+' disconnected');
 	    
-	// });
+	});
 	// socket.on('enterRoom', function(data){
 		
 	// });
