@@ -1,20 +1,42 @@
 ﻿$(document).ready(function(){
     var socket = io();
+    var o={
+        mainImg: $('.mainImg'),
+        word:$('.wrapper .word')
+    };
 
     socket.on('ioAlert',function(data){
         console.log(data.msg);
+        socket.emit('userData',{ h:$(window).height(),w:$(window).width() });
     });
     socket.on('imgGo',function(data){
-        $('.wrapper img').addClass('on');
+        o.word.addClass('on');
+        console.log(data);
+        o.mainImg
+        .css({
+            'height': data.h,
+            'width': 'auto',
+            'top': data.y,
+            'left': $(window).width()
+        });
+    });
+    socket.on('imgMove',function(data){
+        o.mainImg.css({'left': $(window).width()-data.d})
+    });
+    
+    $('.wrapper .word').click(function(){
+        if(o.word.hasClass('on')){
+            socket.emit('start',{width:o.mainImg.width()+$(window).width()});
+        }
+        else{
+            socket.emit('imgGo');
+        }
+    });
+
+    $(window).load(function(){
         
     });
     
-    $(window).load(function(){
-        $('.wrapper .word').html($(window).height());
-        $('.wrapper .word').click(function(){
-            socket.emit('imgGo');
-        });
-    });
 
 })//ready end
 function getUrlVars(){

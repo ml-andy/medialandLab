@@ -1,18 +1,35 @@
 @import "base.scss";
 * { box-sizing: border-box; }
-
+html,body{
+	background-color: #000;
+}
 .wrapper{
 	@include flt;
+	background-color: #000;
 	.word{
-		@include am(auto,auto);
-		@include fontvw(36,36,#000);
+		@include altvw(70,70,50,50,-35,-35);
+		border-radius:getVW(35);
+		left: 50%;
+		top: 50%;
 		text-align: center;
 		z-index: 1;
+		background-color: #e8e8e8;
+		opacity: 0.3;
+		&:before{
+			@include am(auto,auto);
+			@include fontvw(24,24,#333);
+			content:"Ready";
+		}
+		&.on{
+			&:before{
+				content:"Start"
+			}
+		}
 	}
 	img{
-		opacity:0;
+		// opacity:0;
 		position: absolute;
-		height: 100%;
+		// height: 100%;
 		left: 0;
 		top: 0;
 		&.on{
