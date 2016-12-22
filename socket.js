@@ -16,9 +16,8 @@ var o = {
 app.use('/andy', express.static(__dirname + '/dist'));
 
 io.on('connect', function(socket){
-	var empit = searchEmpit();
-	if( empit < 0) users.push(socket);
-	else users[empit] = socket;
+	// var empit = searchEmpit();
+	users.push(socket);
 
 	socket.emit('ioAlert',{msg:'v 0.1'});
 	
@@ -49,7 +48,8 @@ io.on('connect', function(socket){
 	
 	socket.on('disconnect', function(){
 		var i = searhUserIndex(socket.id);
-	    users[i] = 'zz';
+	    users.splice(i,1);
+		io.emit('reload');
 	});
 	
 });

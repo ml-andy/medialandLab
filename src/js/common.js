@@ -23,6 +23,9 @@
     socket.on('imgMove',function(data){
         o.mainImg.css({'left': $(window).width()-data.d})
     });
+    socket.on('reload',function(data){
+        location.reload();
+    });
     
     $('.wrapper .word').click(function(){
         if(o.word.hasClass('on')){
