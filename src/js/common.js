@@ -1,5 +1,5 @@
 ﻿$(document).ready(function(){
-    var socket = io();
+    var socket = io('http://lab.medialand.com.tw', {path:'/andy/socket.io'});
     var o={
         mainImg: $('.mainImg'),
         word:$('.wrapper .word')

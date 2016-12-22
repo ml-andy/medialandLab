@@ -1,9 +1,8 @@
 //socket
-
 var express = require('express');
 var app = require('express')();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var io = require('socket.io')(http, {path:'/andy/socket.io'})
 var users=[],teams=[];
 var o = {
 	moveTimer:'',
@@ -14,18 +13,14 @@ var o = {
 	imgH:0
 };
 
+app.use('/andy', express.static(__dirname + '/dist'));
 
+io.on('connect', function(socket){
+	var empit = searchEmpit();
+	if( empit < 0) users.push(socket);
+	else users[empit] = socket;
 
-app.use(express.static(__dirname + '/andy'));
-__dirname = __dirname +'';
-app.get('/', function(req, res){
-	res.sendFile(__dirname + '/andy/index.html');
-});
-
-io.on('connection', function(socket){
-	users.push(socket);
-
-	searhUser(socket.id).emit('ioAlert',{msg:'v 0.17'});
+	socket.emit('ioAlert',{msg:'v 0.1'});
 	
 	socket.on('userData', function(data){
 		var n = searhUserIndex(socket.id);
@@ -54,7 +49,7 @@ io.on('connection', function(socket){
 	
 	socket.on('disconnect', function(){
 		var i = searhUserIndex(socket.id);
-	    users.splice(i,1);
+	    users[i] = 'zz';
 	});
 	
 });
@@ -90,6 +85,13 @@ function searhUser(_id){
 	}
 	return _thisuser;
 }
-http.listen(8787, function(){
-	console.log('listening on *:8787');
+function searchEmpit(){
+	var empit = -1;
+	for(var j in users){				
+		if(users[j] == 'zz') empit = j;
+	}
+	return empit
+}
+http.listen(3009, function(){
+	console.log('listening on *:3009');
 });

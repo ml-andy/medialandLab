@@ -6,61 +6,60 @@ var imageminMozjpeg = require('imagemin-mozjpeg');
 
 //gulp
 gulp.task('compass',function(){
-    gulp.src('scss/*.scss')
+    gulp.src('src/css/*.scss')
     	.pipe($.plumber()) // if error will not stop gulp
 		.pipe($.compass({
 			sourcemap: true,
 			time: true,
-			css: 'andy/css',
-			sass: 'scss',
+			css: 'dist/css',
+			sass: 'src/css',
 			style: 'compressed'
 		}))    
-		.pipe(gulp.dest('andy/css'))
+		.pipe(gulp.dest('dist/css'))
 		.pipe($.connect.reload());
 });
 gulp.task('js',function(){
-    gulp.src('js/*.js')
+    gulp.src('src/js/**/*.js')
     	.pipe($.plumber())
     	.pipe($.sourcemaps.init())
     	.pipe($.uglify())    	
 	    .pipe($.sourcemaps.write())	    
-	    .pipe(gulp.dest('andy/js'))
+	    .pipe(gulp.dest('dist/js'))
 		.pipe($.connect.reload());
 });
 gulp.task('connect', function() {
   $.connect.server({
-  	// root: 'C:/Users/Lenovo/Desktop/socketDemo 2/andy',
-  	root: 'D:/yihsien/201612/20161215_medialandLab/web/andy',
+  	root: './dist',
   	livereload: true
   });
 });
 gulp.task('imageminJPG', function () {
-	gulp.src('org_images/*.jpg')
+	gulp.src('src/images/**/*.jpg')
 		.pipe($.plumber())
-		.pipe($.changed('andy/images'))	
+		.pipe($.changed('dist/images'))	
 		.pipe(imageminMozjpeg({quality: 90})())
-		.pipe(gulp.dest('andy/images'));
+		.pipe(gulp.dest('dist/images'));
 });
 gulp.task('imageminPNG', function () {
-	gulp.src('org_images/*.png')
+	gulp.src('src/images/**/*.png')
 		.pipe($.plumber())
-		.pipe($.changed('andy/images'))	
+		.pipe($.changed('dist/images'))	
 		.pipe(imageminPngquant({quality: '90'})())
-		.pipe(gulp.dest('andy/images'));
+		.pipe(gulp.dest('dist/images'));
 });
 gulp.task('uploadHTML', function () {
-	gulp.src('html/*.html')
-		.pipe($.changed('andy'))
-		.pipe(gulp.dest('andy'))
+	gulp.src('src/*.html')
+		.pipe($.changed('dist'))
+		.pipe(gulp.dest('dist'))
 		.pipe($.connect.reload());
 });
 gulp.task('del',function(){
 	require('del')('node_modules');
 });
 gulp.task('default',['connect'], function() {
-	gulp.watch(['scss/*.scss'],['compass']);
-	gulp.watch(['js/*.js'],['js']);
-	gulp.watch(['org_images/*.jpg'],['imageminJPG']);
-	gulp.watch(['org_images/*.png'],['imageminPNG']);
-	gulp.watch(['html/*.html'],['uploadHTML']);
+	gulp.watch(['src/css/**/*.scss'],['compass']);
+	gulp.watch(['src/js/**/*.js'],['js']);
+	gulp.watch(['src/images/**/*.jpg'],['imageminJPG']);
+	gulp.watch(['src/images/**/*.png'],['imageminPNG']);
+	gulp.watch(['src/*.html'],['uploadHTML']);
 });
