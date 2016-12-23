@@ -16,7 +16,6 @@ var o = {
 app.use('/andy', express.static(__dirname + '/dist'));
 
 io.on('connect', function(socket){
-	// var empit = searchEmpit();
 	users.push(socket);
 
 	socket.emit('ioAlert',{msg:'v 0.1'});
@@ -49,6 +48,9 @@ io.on('connect', function(socket){
 	socket.on('disconnect', function(){
 		var i = searhUserIndex(socket.id);
 	    users.splice(i,1);
+	});
+
+	socket.on('reload',function(){
 		io.emit('reload');
 	});
 	
@@ -57,6 +59,7 @@ io.on('connect', function(socket){
 function ImgMove(){
 	if( o.moveNowDis >= o.moveDis ){
 		clearTimeout(o.moveTimer);
+		// io.emit('imgMoveEnd');
 	}else{
 		o.moveNowDis +=o.moveSpeed;
 		io.emit('imgMove', { d:o.moveNowDis });
@@ -73,10 +76,10 @@ function imgHCount(){
 }
 function searhUserIndex(_id){
 	var _thisuser;
-	for(var j in users){				
+	for(var j in users){
 		if(users[j].id == _id) _thisuser = j;
 	}
-	return j;
+	return _thisuser;
 }
 function searhUser(_id){
 	var _thisuser;
@@ -85,13 +88,7 @@ function searhUser(_id){
 	}
 	return _thisuser;
 }
-function searchEmpit(){
-	var empit = -1;
-	for(var j in users){				
-		if(users[j] == 'zz') empit = j;
-	}
-	return empit
-}
+
 http.listen(3009, function(){
 	console.log('listening on *:3009');
 });

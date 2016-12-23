@@ -4,6 +4,34 @@ html,body{
 	height: 100%;
 	background-color: #000;
 }
+.loading{
+	@include flt;
+	z-index: 9999;
+	background-color: #000;
+	&.on{
+		span{
+			animation: loadingAni 1s steps(10) infinite;
+			@keyframes loadingAni{
+				100%{ background-position: getVW(-1900); }
+			}
+		}
+	}
+	span{
+		@include amvw(190,240);
+		margin-top:getVW(-30);
+		background-image: url(../images/monster.png);
+		background-repeat: no-repeat;
+		background-size: auto getVW(240);
+		background-position: 0 0;
+		&:before{
+			@include alb(100%,auto);
+			@include fontvw(20,20,#fff);
+			content:"loading";
+			text-align: center;
+			bottom:getVW(-30);
+		}
+	}
+}
 .wrapper{
 	@include flt;
 	background-color: #000;

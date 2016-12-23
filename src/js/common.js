@@ -1,6 +1,7 @@
 ﻿$(document).ready(function(){
     var socket = io('http://lab.medialand.com.tw', {path:'/andy/socket.io'});
     var o={
+        wrapper:$('.wraper'),
         mainImg: $('.mainImg'),
         word:$('.wrapper .word')
     };
@@ -29,17 +30,27 @@
     
     $('.wrapper .word').click(function(){
         if(o.word.hasClass('on')){
+            o.word.hide();
+            $('body').addClass('on');
             socket.emit('start',{width:o.mainImg.width()+$(window).width()});
         }
         else{
             socket.emit('imgGo');
         }
     });
+    // $('body').click(function(){
+    //     if($(this).hasClass('on')) socket.emit('reload');
+    // });
+    
 
     $(window).load(function(){
-        
+        showLoading(false);
     });
     
+    function showLoading(_t){
+        if(_t) $('.loading').addClass('on').fadeIn();
+        else $('.loading').removeClass('on').fadeOut();
+    }
 
 })//ready end
 function getUrlVars(){
