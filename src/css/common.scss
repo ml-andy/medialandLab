@@ -4,6 +4,9 @@ html,body{
 	height: 100%;
 	background-color: #000;
 }
+body{
+	margin-top: 200px;
+}
 .loading{
 	@include flt;
 	z-index: 9999;
@@ -35,34 +38,92 @@ html,body{
 .wrapper{
 	@include flt;
 	background-color: #000;
-	.word{
-		@include altvw(70,70,50,50,-35,-35);
-		border-radius:getVW(35);
-		left: 50%;
-		top: 50%;
-		text-align: center;
-		z-index: 1;
-		background-color: #e8e8e8;
-		opacity: 0.3;
-		&:before{
-			@include am(auto,auto);
-			@include fontvw(24,24,#333);
-			content:"Ready";
+	z-index: 1;
+	.step{
+		@include alt;
+		background-color: #000;
+		&.step1{
+			z-index: 9;
+			input{
+				@include amvw(500,56);
+				@include fontvw(21,56,#000);
+				background-color: #fff;
+				box-sizing: border-box;
+				border: 1px solid #ccc;
+				text-indent: 15px;
+			}
+			.title{
+				@include amvw(100,56);
+				@include fontvw(56,56,#fff);
+				width: 100%;
+				text-align: center;
+				margin-top: getVW(-132);
+				text-transform:uppercase;
+			}
+			.submit{
+				@include amvw(100,36);
+				@include fontvw(21,36,#fff);
+				border-radius: getVW(5);
+				background-color: #333;
+				text-align: center;
+				margin-top: getVW(76);
+			}
 		}
-		&.on{
-			&:before{
-				content:"Start"
+		&.step2{
+			z-index: 8;
+			.word{
+				@include altvw(70,70,50,50,-35,-35);
+				border-radius:getVW(35);
+				left: 50%;
+				top: 50%;
+				text-align: center;
+				z-index: 1;
+				background-color: #e8e8e8;
+				opacity: 0.3;
+				&:before{
+					@include am(auto,auto);
+					@include fontvw(21,24,#333);
+					content:"Start";
+				}
+				// &.on{
+				// 	&:before{
+				// 		content:"Start"
+				// 	}
+				// }
+			}
+			img{
+				position: absolute;
+				left: 0;
+				top: 0;
+				&.on{
+					opacity:1;
+				}
+			}
+		}
+		&.step3{
+			z-index: 7;
+			.again{
+				@include amvw(300,56);
+				@include fontvw(21,56,#fff);
+				border-radius: getVW(5);
+				background-color: #333;
+				text-align: center;
+				margin-top: getVW(-38);
+			}
+			.back{
+				@include amvw(300,56);
+				@include fontvw(21,56,#fff);
+				border-radius: getVW(5);
+				background-color: #333;
+				text-align: center;
+				margin-top: getVW(38);
 			}
 		}
 	}
-	img{
-		// opacity:0;
-		position: absolute;
-		// height: 100%;
-		left: 0;
-		top: 0;
-		&.on{
-			opacity:1;
-		}
-	}
+	
+}
+.sound{
+	@include flt;
+	z-index: 0;
+
 }
