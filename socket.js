@@ -26,9 +26,15 @@ io.on('connect', function(socket){
 		users[n].uWidth = data.w;
 		users[n].uHeight = data.h;
 	});
+	socket.on('disconnect', function(){
+		var i = searhUserIndex(socket.id);
+	    users.splice(i,1);
+	});
 
 	socket.on('imgReady', function(data){
-		io.emit('imgReady', { url: data.url });
+		for(var i=0; i<users.length; i++){
+			users[i].emit('imgReady', { url: data.url, num: i*1+1 });
+		}
 	});
 	socket.on('imgGo', function(data){
 		o.imgH = imgHCount();
@@ -42,39 +48,19 @@ io.on('connect', function(socket){
 			o.allY -= users[i].uHeight;
 		}
 	});
-
+	socket.on('countToGo', function(){
+		io.emit('countToGo',{ num:users.length });
+	});
 	socket.on('start', function(data){
 		o.moveDis = data.width + o.maxW;
 		o.moveNowDis = 0;
-		// ImgMove();
 		io.emit('imgMove', { d:o.moveDis });
 	});
-
-	socket.on('imgNoGo', function(){
-		io.emit('imgNoGo', { for: 'everyone' });
+	socket.on('finish', function(){
+		users[users.length -1 ].emit('finish');
 	});
-	
-	socket.on('disconnect', function(){
-		var i = searhUserIndex(socket.id);
-	    users.splice(i,1);
-	});
-
-	socket.on('reload',function(){
-		io.emit('reload');
-	});
-	
 });
 
-function ImgMove(){
-	// if( o.moveNowDis >= o.moveDis ){
-	// 	clearTimeout(o.moveTimer);
-	// 	// io.emit('imgMoveEnd');
-	// }else{
-	// 	o.moveNowDis +=o.moveSpeed;
-	// 	io.emit('imgMove', { d:o.moveNowDis });
-	// 	o.moveTimer = setTimeout(ImgMove,1);
-	// }
-}
 function imgHCount(){
 	var imgHieght = 0;
 	for(i in users){

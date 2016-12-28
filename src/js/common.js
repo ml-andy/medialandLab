@@ -1,21 +1,42 @@
 ﻿$(document).ready(function(){
+
+/*
+ __  .__   __.  __  .___________.
+|  | |  \ |  | |  | |           |
+|  | |   \|  | |  | `---|  |----`
+|  | |  . `  | |  |     |  |     
+|  | |  |\   | |  |     |  |     
+|__| |__| \__| |__|     |__|     
+
+*/
     var socket = io('http://lab.medialand.com.tw', {path:'/andy/socket.io'});
     var o={
         wrapper:$('.wraper'),
         mainImg: $('.mainImg'),
         word:$('.wrapper .word'),
+        hasToHide:$('.hasToHide'),
         ml:0,
-        time:3
+        num:0,
+        time:1
     };
 
 
-    //socket
+/*   _______.  ______     ______  __  ___  _______ .___________.
+    /       | /  __  \   /      ||  |/  / |   ____||           |
+   |   (----`|  |  |  | |  ,----'|  '  /  |  |__   `---|  |----`
+    \   \    |  |  |  | |  |     |    <   |   __|      |  |     
+.----)   |   |  `--'  | |  `----.|  .  \  |  |____     |  |     
+|_______/     \______/   \______||__|\__\ |_______|    |__|    
+*/
     socket.on('ioAlert',function(data){
         console.log(data.msg);
         socket.emit('userData',{ h:$(window).height(),w:$(window).width() });
     });
     socket.on('imgReady', function(data){
         o.mainImgUrl = data.url;
+        o.num = data.num;
+        $('.step2 .number').html(o.num);
+        initToStart();
         showLoading(true);
         $('.step1').fadeOut();
         o.mainImg.attr('src',o.mainImgUrl).on('load',function(){
@@ -27,7 +48,7 @@
     });
     socket.on('imgGo',function(data){
         o.word.addClass('on');
-        console.log(data);
+        // console.log(data);
         o.ml = $(window).width() + data.ml;
         o.mainImg
         .css({
@@ -37,21 +58,32 @@
             'left': o.ml
         });
     });
-    socket.on('imgMove',function(data){
-        o.mainImg.animate({'left': data.d*-1},3000);
+    socket.on('countToGo',function(data){
+        o.hasToHide.hide();
+        setTimeout(function(){
+            playSound(true,'count1');
+            if(o.num == data.num) socket.emit('start',{width:o.mainImg.width()});
+        },1000);
     });
-    socket.on('reload',function(data){
-        location.reload();
+    socket.on('imgMove',function(data){
+        o.mainImg.animate({'left': data.d*-1},3000,function(){
+            socket.emit('finish');
+        });
+    });
+    socket.on('finish',function(){
+        $('.step3').fadeIn();
     });
 
-    //js
-    $('.submit').click(function(){
-        socket.emit('imgReady',{url:$('.imgUrl').val()});
-    });
-    $('.wrapper .word').click(function(){
-        o.word.hide();
-        count();
-    });
+
+/*
+       __       _______.
+      |  |     /       |
+      |  |    |   (----`
+.--.  |  |     \   \    
+|  `--'  | .----)   |   
+ \______/  |_______/    
+
+*/
     $(window).load(function(){
         showLoading(false);
         $("audio").each(function(i, e){
@@ -66,17 +98,19 @@
             });
         }, 300);
     });
-    
-    function count(){
-        o.time-=1;
+    $('.submit').click(function(){
         playSound(true,'count1');
-        setTimeout(function(){
-            if(o.time==0){
-                playSound(true,'count2');
-                socket.emit('start',{width:o.mainImg.width()});
-            }else count();
-        },1000);
-    }
+        socket.emit('imgReady',{url:$('.imgUrl').val()});
+    });
+    $('.wrapper .word').click(function(){
+        socket.emit('countToGo');
+    });
+    $('.back').click(init);
+    $('.again').click(function(){
+        socket.emit('imgReady',{url:$('.imgUrl').val()});
+    });
+    
+    
     function showLoading(_t){
         if(_t) $('.loading').addClass('on').fadeIn();
         else $('.loading').removeClass('on').fadeOut();
@@ -87,6 +121,14 @@
         }else{
             try{$("#"+_txt)[0].pause();}catch(err){}
         }
+    }
+    function initToStart(){
+        o.hasToHide.show();
+        $('.step3').hide();
+    }
+    function init(){
+        $('.step3').fadeOut();
+        $('.step1').fadeIn();
     }
 
 })//ready end

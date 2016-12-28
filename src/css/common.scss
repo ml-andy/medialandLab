@@ -71,25 +71,27 @@ body{
 		}
 		&.step2{
 			z-index: 8;
-			.word{
-				@include altvw(70,70,50,50,-35,-35);
-				border-radius:getVW(35);
-				left: 50%;
-				top: 50%;
+			.number{
+				@include amvw(500,500);
+				@include fontvw(360,500,#fff,bolder);
+				z-index: 0;
 				text-align: center;
-				z-index: 1;
-				background-color: #e8e8e8;
-				opacity: 0.3;
+			}
+			.word{
+				@include alt;
 				&:before{
-					@include am(auto,auto);
-					@include fontvw(21,24,#333);
+					@include albvw(200,200,50,25,-100);
+					@include fontvw(50,200,#333);
+					border-radius:getVW(100);
+					box-sizing: border-box;
+					border: 3px solid #fff;
+					left: 50%;
+					text-align: center;
+					z-index: 1;
+					background-color: #e8e8e8;
+					opacity: 0.3;
 					content:"Start";
 				}
-				// &.on{
-				// 	&:before{
-				// 		content:"Start"
-				// 	}
-				// }
 			}
 			img{
 				position: absolute;
@@ -101,7 +103,8 @@ body{
 			}
 		}
 		&.step3{
-			z-index: 7;
+			z-index: 9;
+			display: none;
 			.again{
 				@include amvw(300,56);
 				@include fontvw(21,56,#fff);
