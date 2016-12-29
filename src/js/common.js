@@ -66,7 +66,11 @@
         },1000);
     });
     socket.on('imgMove',function(data){
-        o.mainImg.animate({'left': data.d*-1},3000,function(){
+        o.humanWalkDis = data.d / 56; //1 cm = 56 px
+        o.humanWalkStep = Math.ceil(o.humanWalkDis / 25); //1 step = 25cm
+        o.imgMoveTime = Math.floor(o.humanWalkDis * 20); //100 cm = 2 sec, 1 cm = 20 msec
+        countStep();
+        o.mainImg.animate({'left': data.d*-1},o.imgMoveTime,function(){
             socket.emit('finish');
         });
     });
@@ -129,6 +133,15 @@
     function init(){
         $('.step3').fadeOut();
         $('.step1').fadeIn();
+    }
+    function countStep(){
+        o.humanWalkStep -=1;
+        setTimeout(function(){
+            if(o.humanWalkStep>0){
+                countStep();
+                playSound(true,'count1');
+            }
+        },500);
     }
 
 })//ready end
